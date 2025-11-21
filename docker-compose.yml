@@ -1,0 +1,146 @@
+name: ${APP_NAME}
+
+services:
+  postgres:
+    image: postgres
+    container_name: ${APP_NAME}-postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  minio:
+    image: bitnami/minio:latest
+    container_name: ${APP_NAME}-minio
+    user: "0:0"
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ${APP_NAME}-redis
+    env_file:
+      - .env
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      #don't touch below settings, they are set for optimal performance and data safety, you can change maxmemory as per your need your system capacity
+    command: >
+      sh -c '
+      if [ -n "$$REDIS_PASSWORD" ]; then
+        redis-server --requirepass "$$REDIS_PASSWORD" --appendonly yes --maxmemory 256mb --maxmemory-policy noeviction
+      else
+        redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy noeviction
+      fi
+      '
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Next.js Application Server
+  # Uncomment and configure your app server later
+  #app:
+  #  build:
+  #    context: .
+  #    dockerfile: Dockerfile
+  #    args:
+  #      - NODE_ENV=production
+  #  container_name: ${APP_NAME}-app
+  #  ports:
+  #    - "3000:3000"
+  #  env_file:
+  #    - .env
+  #  environment:
+  #    # Database Configuration
+  #    DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable
+
+  #    # Redis Configuration
+  #    REDIS_HOST: ${REDIS_HOST}
+  #    REDIS_PORT: 6379
+  #    REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+  #    # MinIO/S3 Configuration
+  #    S3_ENDPOINT: ${S3_ENDPOINT}
+  #    S3_PORT: 9000
+  #    S3_ACCESS_KEY: ${MINIO_ROOT_USER}
+  #    S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+  #    S3_USE_SSL: "false"
+
+  #    # Application Configuration
+  #    CORS_ORIGIN: http://localhost:3000
+  #    NODE_ENV: production
+  #    NEXT_TELEMETRY_DISABLED: 1
+  #  depends_on:
+  #    postgres:
+  #      condition: service_healthy
+  #    minio:
+  #      condition: service_healthy
+  #    redis:
+  #      condition: service_healthy
+  #  restart: unless-stopped
+  #  networks:
+  #    - app-network
+  #  volumes:
+  #    # Optional: Mount for logs
+  #    - ./logs:/app/logs
+  #  healthcheck:
+  #    test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+  #    interval: 30s
+  #    timeout: 10s
+  #    retries: 3
+  #    start_period: 40s
+
+#tip/ driver: local,  this ensures data persistence on host machine
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
