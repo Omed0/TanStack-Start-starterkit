@@ -11,10 +11,12 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@tanstack/react-router";
+import { useStore } from "better-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function UserMenu() {
 	const navigate = useNavigate();
-	const { data: session, isPending } = authClient.useSession.get();
+	const { data: session, isPending } = useStore(authClient.useSession);
 
 	if (isPending) {
 		return <Skeleton className="h-9 w-24" />;
@@ -31,9 +33,17 @@ export default function UserMenu() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline">{session.user.name}</Button>
+				<Avatar className="me-2 size-9 cursor-pointer">
+					<AvatarImage
+						src={session.user.image ?? undefined}
+						alt={session.user.name}
+					/>
+					<AvatarFallback className="text-sm">
+						{session.user.name.slice(0, 2)}
+					</AvatarFallback>
+				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="bg-card">
+			<DropdownMenuContent className="bg-card space-y-2 me-2">
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>{session.user.email}</DropdownMenuItem>

@@ -22,7 +22,6 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
-import { cn } from "@/lib/utils"
 
 export function QueueList() {
     const { data, isLoading, refetch, isRefetching } = useQuery(
@@ -105,7 +104,7 @@ export function QueueList() {
                         onClick={() => refetch()}
                         disabled={isLoading || isRefetching}
                     >
-                        <RefreshCw className={cn("h-4 w-4", { "animate-spin": isRefetching })} />
+                        <RefreshCw className={`size-5 ${isRefetching && "animate-spin"}`} />
                     </Button>
                 </section>
             </CardHeader>

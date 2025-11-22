@@ -7,9 +7,9 @@ import {
 	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
-//import {
-//	ReactQueryDevtools
-//} from "@tanstack/react-query-devtools";
+import {
+	ReactQueryDevtools
+} from "@tanstack/react-query-devtools";
 import Header from "@/components/header";
 import appCss from "@/index.css?url";
 import { getUser, type AuthSession } from "@/fn/related-user";
@@ -23,7 +23,6 @@ export interface RouterAppContext extends Omit<RqContext, 'session'> {
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	async context(ctx) {
 		ctx.context.session = ctx.context.session ?? await getUser();
-
 		return ctx;
 	},
 	beforeLoad: async () => {
@@ -83,6 +82,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
+	const { queryClient } = Route.useRouteContext()
 	return (
 		<html lang="en" className="dark">
 			<head>
@@ -92,11 +92,11 @@ function RootDocument() {
 				<Header />
 				<Outlet />
 				<Toaster richColors />
-				{/*<ReactQueryDevtools
+				<ReactQueryDevtools
 					initialIsOpen={false}
 					buttonPosition="bottom-left"
 					client={queryClient}
-				/>*/}
+				/>
 				<Scripts />
 			</body>
 		</html>

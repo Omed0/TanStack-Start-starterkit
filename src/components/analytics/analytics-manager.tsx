@@ -39,7 +39,7 @@ export function AnalyticsManager() {
         refetch: refetchMetrics,
     } = useQuery({
         ...api.analytics.getOverviewMetrics.queryOptions({ data: dateRange }),
-        refetchInterval
+        refetchInterval,
     });
 
     // Fetch top events
@@ -162,7 +162,7 @@ export function AnalyticsManager() {
                     //size="sm"
                     >
                         <RefreshCw
-                            className={`mr-2 h-4 w-4 ${isLoading || isRefetching ? "animate-spin" : ""}`}
+                            className={`me-2 size-4 ${isRefetching ? "animate-spin" : ""}`}
                         />
                         Refresh
                     </Button>

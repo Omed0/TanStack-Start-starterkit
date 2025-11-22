@@ -16,7 +16,7 @@ export function getRouter() {
 		defaultPreload: "intent", // like nextjs preload on hover Links Component
 		defaultPendingComponent: () => <Loader />,
 		defaultNotFoundComponent: () => <div>Not Found</div>,
-		//Wrap: ({ children }) => ( // u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true, but id u have more providers u can add them here
+		//Wrap: ({ children }) => ( // u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here
 		//	<>
 		//		{children}
 		//	</>
@@ -27,7 +27,7 @@ export function getRouter() {
 		router,
 		queryClient: rqContexts.queryClient,
 		handleRedirects: true,
-		// Wrap QueryClient to support SSR properly mean we dont need Wrpa on tanstack createRouter, and congiugrue hydration and dehyration automatically for us
+		// Wrap QueryClient to support SSR properly mean we dont need wrap on tanstack createRouter provider, and configure hydration and de-hyration automatically for us
 		wrapQueryClient: true,
 	});
 
