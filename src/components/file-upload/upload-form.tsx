@@ -10,8 +10,8 @@ import {
 	getPresignedUrls,
 	handleUpload,
 	type ShortFileProp,
-} from "@/lib/file-management/s3-file-helper"
-import { MAX_FILE_SIZE_S3_ENDPOINT } from "@/lib/file-management/constant"
+} from "@/lib/storage/helper"
+import { MAX_FILE_SIZE_S3_ENDPOINT } from "@/lib/storage/constant"
 
 interface UploadFormProps {
 	onUploadSuccess: () => void

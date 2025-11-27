@@ -1,8 +1,10 @@
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
+import { Providers } from "./components/layout/clients-provider";
 import { getContext } from "@/lib/tanstack-utils/contexts";
+import Loader from "@/components/layout/loader";
 import { routeTree } from "@/routeTree.gen";
-import Loader from "@/components/loader";
+import "@/lib/i18n/index"
 import "@/index.css";
 
 
@@ -16,11 +18,12 @@ export function getRouter() {
 		defaultPreload: "intent", // like nextjs preload on hover Links Component
 		defaultPendingComponent: () => <Loader />,
 		defaultNotFoundComponent: () => <div>Not Found</div>,
-		//Wrap: ({ children }) => ( // u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here
-		//	<>
-		//		{children}
-		//	</>
-		//),
+		Wrap: ({ children }) => (
+			// u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here
+			<Providers>
+				{children}
+			</Providers>
+		),
 	});
 
 	setupRouterSsrQueryIntegration({

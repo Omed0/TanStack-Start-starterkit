@@ -1,19 +1,25 @@
-import type { RqContext } from "@/lib/tanstack-utils/contexts";
-import { Toaster } from "@/components/ui/sonner";
-
+import React from "react";
 import {
-	HeadContent,
-	Outlet,
-	Scripts,
 	createRootRouteWithContext,
+	Scripts, useRouter
 } from "@tanstack/react-router";
-import {
-	ReactQueryDevtools
-} from "@tanstack/react-query-devtools";
-import Header from "@/components/header";
-import appCss from "@/index.css?url";
+import type { RqContext } from "@/lib/tanstack-utils/contexts";
 import { getUser, type AuthSession } from "@/fn/related-user";
-import { initWorkers } from "@/fn";
+import { HeadContent } from "@tanstack/react-router";
+import i18n, { setSSRLanguage } from "@/lib/i18n";
+import { Toaster } from "@/components/ui/sonner";
+import { Outlet } from "@tanstack/react-router";
+import Header from "@/components/layout/header";
+import appCss from "@/index.css?url";
+
+const ReactQueryDevtools =
+	process.env.NODE_ENV === "production"
+		? () => null
+		: React.lazy(() =>
+			import("@tanstack/react-query-devtools").then((res) => ({
+				default: res.ReactQueryDevtools,
+			})),
+		)
 
 export interface RouterAppContext extends Omit<RqContext, 'session'> {
 	session?: AuthSession;
@@ -21,24 +27,11 @@ export interface RouterAppContext extends Omit<RqContext, 'session'> {
 }
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
-	async context(ctx) {
-		ctx.context.session = ctx.context.session ?? await getUser();
-		return ctx;
-	},
-	beforeLoad: async () => {
-		try {
-			//context.session ??= await getUser();
-			//context.customer ??= await getPayment();
+	beforeLoad: async ({ context }) => {
+		context.session ??= await getUser()
+		await setSSRLanguage()
 
-			// Initialize BullMQ workers on server startup (non-blocking)
-			if (typeof window === "undefined") {
-				initWorkers().catch((error) => {
-					console.error("Failed to initialize workers:", error);
-				});
-			}
-		} catch (error) {
-			console.error("Error in beforeLoad:", error);
-		}
+		return { session: context.session }
 	},
 	head: () => ({
 		meta: [
@@ -50,7 +43,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "My App",
+				title: i18n.t("seo.title", { defaultValue: "Digital Menu" }),
+				description: i18n.t("seo.description", { defaultValue: "Digital Menu" }),
 			},
 		],
 		links: [
@@ -64,7 +58,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	component: RootDocument,
 	errorComponent: ({ error }) => {
 		return (
-			<html lang="en" className="dark">
+			<html lang={i18n.language} suppressHydrationWarning>
 				<head>
 					<HeadContent />
 				</head>
@@ -83,8 +77,19 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
 	const { queryClient } = Route.useRouteContext()
+	const router = useRouter()
+
+	React.useEffect(() => {
+		const handler = () => {
+			router.invalidate()
+		}
+		i18n.on("languageChanged", handler)
+		return () => {
+			i18n.off("languageChanged", handler)
+		}
+	}, [router]) // this for changeing title and description page when change language if u used title and more thing in head, if not u can remove 
 	return (
-		<html lang="en" className="dark">
+		<html lang={i18n.language} suppressHydrationWarning>
 			<head>
 				<HeadContent />
 			</head>
@@ -92,11 +97,13 @@ function RootDocument() {
 				<Header />
 				<Outlet />
 				<Toaster richColors />
-				<ReactQueryDevtools
-					initialIsOpen={false}
-					buttonPosition="bottom-left"
-					client={queryClient}
-				/>
+				<React.Suspense fallback={null}>
+					<ReactQueryDevtools
+						initialIsOpen={false}
+						buttonPosition="bottom-left"
+						client={queryClient}
+					/>
+				</React.Suspense>
 				<Scripts />
 			</body>
 		</html>

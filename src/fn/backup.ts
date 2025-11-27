@@ -5,10 +5,10 @@ import {
   triggerBackup,
   scheduleAutomaticBackup,
   scheduleWeeklyBackup,
-} from "@/lib/bullmq/examples/database-backup-queue";
-import { queueManager, QueueNameSchema } from "@/lib/bullmq";
-import { restoreBackup } from "@/lib/file-management/s3-file-helper";
-import { bucketName } from "@/lib/file-management/constant";
+} from "@/lib/jobs/examples/database-backup-queue";
+import { jobManager, JobQueueSchema } from "@/lib/jobs";
+import { restoreBackup } from "@/lib/storage/helper";
+import { bucketName } from "@/lib/storage/constant";
 
 /**
  * Trigger a manual backup
@@ -75,7 +75,7 @@ export const scheduleCustomBackup = createServerFn({ method: "POST" })
     })
   )
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
 
     const job = await queue.add(
       "database-backup",
@@ -107,7 +107,7 @@ export const scheduleCustomBackup = createServerFn({ method: "POST" })
 export const getScheduledBackups = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
     const repeatableJobs = await queue.getJobSchedulers();
 
     return repeatableJobs.map((job: any) => ({
@@ -126,7 +126,7 @@ export const removeScheduledBackup = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(z.object({ key: z.string() }))
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
     await queue.removeJobScheduler(data.key);
 
     return {
@@ -142,7 +142,7 @@ export const getBackupJobStatus = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .inputValidator(z.object({ jobId: z.string() }))
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
     const job = await queue.getJob(data.jobId);
 
     if (!job) {
@@ -173,7 +173,7 @@ export const getRecentBackupJobs = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .inputValidator(z.object({ limit: z.number().default(10) }))
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
 
     const [completed, failed, active, waiting] = await Promise.all([
       queue.getCompleted(0, data.limit),
@@ -209,7 +209,7 @@ export const getRecentBackupJobs = createServerFn({ method: "GET" })
 export const getBackupStats = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
 
     const [waiting, active, completed, failed, delayed] = await Promise.all([
       queue.getWaitingCount(),
@@ -236,7 +236,7 @@ export const retryBackupJob = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(z.object({ jobId: z.string() }))
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
     const job = await queue.getJob(data.jobId);
 
     if (!job) {
@@ -258,7 +258,7 @@ export const removeBackupJob = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(z.object({ jobId: z.string() }))
   .handler(async ({ data }) => {
-    const queue = queueManager.getQueue(QueueNameSchema.enum.CLEANUP);
+    const queue = jobManager.getQueue(JobQueueSchema.enum.CLEANUP);
     const job = await queue.getJob(data.jobId);
 
     if (!job) {
@@ -280,7 +280,7 @@ export const listBackups = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
     const { listObjectsInBucket } = await import(
-      "@/lib/file-management/s3-file-client"
+      "@/lib/storage"
     );
 
     const backups = await listObjectsInBucket({
@@ -308,7 +308,7 @@ export const getBackupDetails = createServerFn({ method: "GET" })
   .inputValidator(z.object({ objectName: z.string() }))
   .handler(async ({ data }) => {
     const { getObjectMetadata } = await import(
-      "@/lib/file-management/s3-file-client"
+      "@/lib/storage"
     );
 
     try {
@@ -364,7 +364,7 @@ export const deleteBackupFromStorage = createServerFn({ method: "POST" })
   .inputValidator(z.object({ objectName: z.string() }))
   .handler(async ({ data }) => {
     const { deleteFileFromBucket } = await import(
-      "@/lib/file-management/s3-file-client"
+      "@/lib/storage"
     );
 
     const deleted = await deleteFileFromBucket({

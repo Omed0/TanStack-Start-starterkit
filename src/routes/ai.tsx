@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
-import { Response } from "@/components/response";
+import { Response } from "@/components/layout/response";
 
 export const Route = createFileRoute("/ai")({
 	component: RouteComponent,

@@ -4,17 +4,17 @@ import { z, nanoid } from "zod";
 import {
   type PresignedUrlProp,
   type ShortFileProp,
-} from "@/lib/file-management/s3-file-helper";
+} from "@/lib/storage/helper";
 import {
   LIMIT_FILES,
   expiry,
   bucketName,
-} from "@/lib/file-management/constant";
+} from "@/lib/storage/constant";
 import {
   createPresignedUrlToDownload,
   createPresignedUrlToUpload,
   deleteFileFromBucket,
-} from "@/lib/file-management/s3-file-client";
+} from "@/lib/storage";
 
 /**
  * Get all files

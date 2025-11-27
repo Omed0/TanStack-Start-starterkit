@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TodosRouteImport } from './routes/todos'
 import { Route as SuccessRouteImport } from './routes/success'
 import { Route as QueuesRouteImport } from './routes/queues'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as FilesRouteImport } from './routes/files'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BackupRouteImport } from './routes/backup'
@@ -21,6 +20,8 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as MenuRouteRouteImport } from './routes/$menu/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MenuIndexRouteImport } from './routes/$menu/index'
+import { Route as AuthAuthViewRouteImport } from './routes/auth/$authView'
+import { Route as AccountAccountViewRouteImport } from './routes/account/$accountView'
 import { Route as MenuMenuRouteImport } from './routes/$menu/menu'
 import { Route as MenuFeedbackRouteImport } from './routes/$menu/feedback'
 import { Route as MenuItemRouteImport } from './routes/$menu/$item'
@@ -40,11 +41,6 @@ const SuccessRoute = SuccessRouteImport.update({
 const QueuesRoute = QueuesRouteImport.update({
   id: '/queues',
   path: '/queues',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilesRoute = FilesRouteImport.update({
@@ -87,6 +83,16 @@ const MenuIndexRoute = MenuIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MenuRouteRoute,
 } as any)
+const AuthAuthViewRoute = AuthAuthViewRouteImport.update({
+  id: '/auth/$authView',
+  path: '/auth/$authView',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountAccountViewRoute = AccountAccountViewRouteImport.update({
+  id: '/account/$accountView',
+  path: '/account/$accountView',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MenuMenuRoute = MenuMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -121,13 +127,14 @@ export interface FileRoutesByFullPath {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
-  '/login': typeof LoginRoute
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
   '/$menu/$item': typeof MenuItemRoute
   '/$menu/feedback': typeof MenuFeedbackRoute
   '/$menu/menu': typeof MenuMenuRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/$menu/': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -139,13 +146,14 @@ export interface FileRoutesByTo {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
-  '/login': typeof LoginRoute
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
   '/$menu/$item': typeof MenuItemRoute
   '/$menu/feedback': typeof MenuFeedbackRoute
   '/$menu/menu': typeof MenuMenuRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/$menu': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -159,13 +167,14 @@ export interface FileRoutesById {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/files': typeof FilesRoute
-  '/login': typeof LoginRoute
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
   '/$menu/$item': typeof MenuItemRoute
   '/$menu/feedback': typeof MenuFeedbackRoute
   '/$menu/menu': typeof MenuMenuRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/$menu/': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -180,13 +189,14 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/files'
-    | '/login'
     | '/queues'
     | '/success'
     | '/todos'
     | '/$menu/$item'
     | '/$menu/feedback'
     | '/$menu/menu'
+    | '/account/$accountView'
+    | '/auth/$authView'
     | '/$menu/'
     | '/api/ai/$'
     | '/api/auth/$'
@@ -198,13 +208,14 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/files'
-    | '/login'
     | '/queues'
     | '/success'
     | '/todos'
     | '/$menu/$item'
     | '/$menu/feedback'
     | '/$menu/menu'
+    | '/account/$accountView'
+    | '/auth/$authView'
     | '/$menu'
     | '/api/ai/$'
     | '/api/auth/$'
@@ -217,13 +228,14 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/files'
-    | '/login'
     | '/queues'
     | '/success'
     | '/todos'
     | '/$menu/$item'
     | '/$menu/feedback'
     | '/$menu/menu'
+    | '/account/$accountView'
+    | '/auth/$authView'
     | '/$menu/'
     | '/api/ai/$'
     | '/api/auth/$'
@@ -237,10 +249,11 @@ export interface RootRouteChildren {
   BackupRoute: typeof BackupRoute
   DashboardRoute: typeof DashboardRoute
   FilesRoute: typeof FilesRoute
-  LoginRoute: typeof LoginRoute
   QueuesRoute: typeof QueuesRoute
   SuccessRoute: typeof SuccessRoute
   TodosRoute: typeof TodosRoute
+  AccountAccountViewRoute: typeof AccountAccountViewRoute
+  AuthAuthViewRoute: typeof AuthAuthViewRoute
   ApiAiSplatRoute: typeof ApiAiSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -266,13 +279,6 @@ declare module '@tanstack/react-router' {
       path: '/queues'
       fullPath: '/queues'
       preLoaderRoute: typeof QueuesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/files': {
@@ -330,6 +336,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/$menu/'
       preLoaderRoute: typeof MenuIndexRouteImport
       parentRoute: typeof MenuRouteRoute
+    }
+    '/auth/$authView': {
+      id: '/auth/$authView'
+      path: '/auth/$authView'
+      fullPath: '/auth/$authView'
+      preLoaderRoute: typeof AuthAuthViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/$accountView': {
+      id: '/account/$accountView'
+      path: '/account/$accountView'
+      fullPath: '/account/$accountView'
+      preLoaderRoute: typeof AccountAccountViewRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/$menu/menu': {
       id: '/$menu/menu'
@@ -395,10 +415,11 @@ const rootRouteChildren: RootRouteChildren = {
   BackupRoute: BackupRoute,
   DashboardRoute: DashboardRoute,
   FilesRoute: FilesRoute,
-  LoginRoute: LoginRoute,
   QueuesRoute: QueuesRoute,
   SuccessRoute: SuccessRoute,
   TodosRoute: TodosRoute,
+  AccountAccountViewRoute: AccountAccountViewRoute,
+  AuthAuthViewRoute: AuthAuthViewRoute,
   ApiAiSplatRoute: ApiAiSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

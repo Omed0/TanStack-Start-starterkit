@@ -3,7 +3,7 @@ import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import type { File } from "@/prisma/generated/browser";
-import { downloadFile, formatBytes } from "@/lib/file-management/s3-file-helper"
+import { downloadFile, formatBytes } from "@/lib/storage/helper"
 import { api } from "@/fn"
 
 

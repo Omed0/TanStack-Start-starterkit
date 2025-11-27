@@ -3,7 +3,7 @@ import { Pause, Play, Trash2, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
 
 import { api } from "@/fn"
-import type { QueueName } from "@/lib/bullmq"
+import type { QueueName } from "@/lib/jobs"
 import {
     Card,
     CardContent,

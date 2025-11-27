@@ -1,5 +1,5 @@
-import type { AuthSession } from "@/fn/related-user";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
+import type { AuthSession } from "@/fn/related-user";
 import { toast } from "sonner";
 
 export function getContext() {
@@ -34,8 +34,8 @@ export function getContext() {
     },
   });
 
-  let session: AuthSession | null = null; // Default to null, we preload it on beforeLoad in SSR Router global page
-  //let customer: PaymentCustomerState | null = null; // Default to null, we preload it on beforeLoad in SSR Router global page
+  let session: AuthSession | null = null; // Default to null, we preload it on context in SSR Router global page
+  //let customer: PaymentCustomerState | null = null; // Default to null, we preload it on context in SSR Router global page
   return {
     queryClient,
     session,

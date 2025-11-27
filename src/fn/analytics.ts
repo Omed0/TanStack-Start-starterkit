@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/tanstack-utils/middlewares";
-import { z } from "zod/v3";
 import { getEnv } from "@/lib/env";
+import { z } from "zod/v3";
 
 const envs = getEnv();
 
@@ -83,10 +83,9 @@ export const getOverviewMetrics = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "";
+        : "";
 
     // Query for total events
     const eventsQuery = {
@@ -176,10 +175,9 @@ export const getTopEvents = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "AND timestamp >= now() - INTERVAL 7 DAY";
+        : "AND timestamp >= now() - INTERVAL 7 DAY";
 
     const query = {
       query: {
@@ -232,10 +230,9 @@ export const getTopPages = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "AND timestamp >= now() - INTERVAL 7 DAY";
+        : "AND timestamp >= now() - INTERVAL 7 DAY";
 
     const query = {
       query: {
@@ -293,10 +290,9 @@ export const getEventsTrend = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "AND timestamp >= now() - INTERVAL 30 DAY";
+        : "AND timestamp >= now() - INTERVAL 30 DAY";
 
     const eventFilter = data.eventName ? `AND event = '${data.eventName}'` : "";
 
@@ -414,10 +410,9 @@ export const getBrowserStats = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "AND timestamp >= now() - INTERVAL 7 DAY";
+        : "AND timestamp >= now() - INTERVAL 7 DAY";
 
     const query = {
       query: {
@@ -471,10 +466,9 @@ export const getDeviceStats = createServerFn({ method: "GET" })
     const dateFilter = data.days
       ? `AND timestamp >= now() - INTERVAL ${data.days} DAY`
       : data.from
-      ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${
-          data.to ? `toDateTime('${data.to}')` : "now()"
+        ? `AND timestamp >= toDateTime('${data.from}') AND timestamp <= ${data.to ? `toDateTime('${data.to}')` : "now()"
         }`
-      : "AND timestamp >= now() - INTERVAL 7 DAY";
+        : "AND timestamp >= now() - INTERVAL 7 DAY";
 
     const query = {
       query: {

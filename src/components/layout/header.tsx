@@ -1,48 +1,40 @@
-
-
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { authClient } from "@/lib/auth-client";
-import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import UserMenu from "@/components/layout/user-menu";
+import LanguageToggle from "@/components/layout/language-toggle";
+import { ModeToggle } from "@/components/layout/mode-toggle";
 
-
-export default function Header(
-	{ LeftSideElement }: { LeftSideElement: React.ReactNode }
-) {
-	const { isPending, data } = authClient.useSession.get();
-
-	const user = data?.user;
-	const initials = user?.name.charAt(0) || "U";
+export default function Header() {
+	const links = [
+		{ to: "/", label: "Home" },
+		{ to: "/dashboard", label: "Dashboard" },
+		{ to: "/todos", label: "Todos" },
+		{ to: "/queues", label: "Queues" },
+		{ to: "/backup", label: "Backup" },
+		{ to: "/analytics", label: "Analytics" },
+		{ to: "/files", label: "Files" },
+		{ to: "/ai", label: "AI Chat" },
+		{ to: "/$menu", label: "The Golden Spoon", param: "the-golden-spoon" as const },
+	];
 
 	return (
-		<header className="w-full sticky top-0 z-50 flex items-center justify-between">
-			{/* Mobile sidebar trigger */}
-			{LeftSideElement}
-
-			{/* Right side actions - visible on all screen sizes */}
-			<div className="flex justify-end text-lg">
-				{isPending ? (
-					<Skeleton className="h-9 w-20" />
-				) : user ? (
-					<div className="flex gap-2 items-center">
-						<Avatar>
-							<AvatarImage
-								src={user?.image || undefined}
-								alt={user?.name || "User Avatar"}
-							/>
-							<AvatarFallback>
-								{initials}
-							</AvatarFallback>
-						</Avatar>
-						<span>{user?.name.split(" ")[0]}</span>
-					</div>
-				) : (
-					<Link to={"/login"} className={buttonVariants()}>
-						Sign In
-					</Link>
-				)}
+		<div>
+			<div className="flex flex-row items-center justify-between px-2 py-1">
+				<nav className="flex gap-4 text-lg">
+					{links.map((route) => {
+						return (
+							<Link key={route.to} to={route.to} params={route.param ? { menu: route.param } : undefined}>
+								{route.label}
+							</Link>
+						);
+					})}
+				</nav>
+				<div className="flex items-center gap-2">
+					<ModeToggle />
+					<LanguageToggle />
+					<UserMenu />
+				</div>
 			</div>
-		</header>
-	);
+			<hr />
+		</div>
+	)
 }

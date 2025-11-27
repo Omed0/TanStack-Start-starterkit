@@ -1,27 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/tanstack-utils/middlewares";
-import { JobStatusSchema, queueManager, QueueNameSchema } from "@/lib/bullmq";
-import { initializeWorkers } from "@/lib/bullmq/init-workers";
+import { JobStatusSchema, jobManager, JobQueueSchema } from "@/lib/jobs";
 import { z } from "zod/v3";
 
-/**
- * Initialize BullMQ workers on server startup
- * This should be called early in the application lifecycle
- */
-export const initWorkers = createServerFn({ method: "GET" }).handler(
-  async () => {
-    try {
-      await initializeWorkers();
-      return { success: true };
-    } catch (error) {
-      console.error("Failed to initialize workers:", error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
-    }
-  }
-);
 
 /**
  * Get all queues status with metrics
@@ -29,13 +10,13 @@ export const initWorkers = createServerFn({ method: "GET" }).handler(
 export const getQueuesStatus = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
-    const queueNames = QueueNameSchema.options;
+    const queueNames = JobQueueSchema.options;
 
     const queuesStatus = await Promise.all(
       queueNames.map(async (queueName) => {
         try {
-          const metrics = await queueManager.getMetrics(queueName);
-          const queue = queueManager.getQueueInstance(queueName);
+          const metrics = await jobManager.getMetrics(queueName);
+          const queue = jobManager.getQueueInstance(queueName);
 
           return {
             name: queueName,
@@ -78,9 +59,9 @@ export const getQueuesStatus = createServerFn({ method: "GET" })
  */
 export const pauseQueue = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator(z.object({ queueName: QueueNameSchema }))
+  .inputValidator(z.object({ queueName: JobQueueSchema }))
   .handler(async ({ data }) => {
-    await queueManager.pauseQueue(data.queueName);
+    await jobManager.pauseQueue(data.queueName);
     return {
       success: true,
       message: `Queue ${data.queueName} paused`,
@@ -92,9 +73,9 @@ export const pauseQueue = createServerFn({ method: "POST" })
  */
 export const resumeQueue = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .inputValidator(z.object({ queueName: QueueNameSchema }))
+  .inputValidator(z.object({ queueName: JobQueueSchema }))
   .handler(async ({ data }) => {
-    await queueManager.resumeQueue(data.queueName);
+    await jobManager.resumeQueue(data.queueName);
     return {
       success: true,
       message: `Queue ${data.queueName} resumed`,
@@ -108,14 +89,14 @@ export const cleanQueue = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(
     z.object({
-      queueName: QueueNameSchema,
+      queueName: JobQueueSchema,
       grace: z.number().default(86400000), // 24 hours default
       limit: z.number().default(1000),
       status: z.enum(["completed", "failed"]).default("completed"),
     })
   )
   .handler(async ({ data }) => {
-    const cleaned = await queueManager.cleanQueue(
+    const cleaned = await jobManager.cleanQueue(
       data.queueName,
       data.grace,
       data.limit,
@@ -137,12 +118,12 @@ export const drainQueue = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(
     z.object({
-      queueName: QueueNameSchema,
+      queueName: JobQueueSchema,
       delayed: z.boolean().default(false),
     })
   )
   .handler(async ({ data }) => {
-    await queueManager.drainQueue(data.queueName, data.delayed);
+    await jobManager.drainQueue(data.queueName, data.delayed);
     return {
       success: true,
       message: `Queue ${data.queueName} drained`,
@@ -156,12 +137,12 @@ export const getJob = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .inputValidator(
     z.object({
-      queueName: QueueNameSchema,
+      queueName: JobQueueSchema,
       jobId: z.string(),
     })
   )
   .handler(async ({ data }) => {
-    const job = await queueManager.getJob(data.queueName, data.jobId);
+    const job = await jobManager.getJob(data.queueName, data.jobId);
 
     if (!job) {
       throw new Error("Job not found");
@@ -192,12 +173,12 @@ export const removeJob = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .inputValidator(
     z.object({
-      queueName: QueueNameSchema,
+      queueName: JobQueueSchema,
       jobId: z.string(),
     })
   )
   .handler(async ({ data }) => {
-    await queueManager.removeJob(data.queueName, data.jobId);
+    await jobManager.removeJob(data.queueName, data.jobId);
     return {
       success: true,
       message: `Job ${data.jobId} removed`,
@@ -211,13 +192,13 @@ export const getJobsByStatus = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .inputValidator(
     z.object({
-      queueName: QueueNameSchema,
+      queueName: JobQueueSchema,
       status: JobStatusSchema.default("wait"),
       limit: z.number().default(50),
     })
   )
   .handler(async ({ data }) => {
-    const jobs = await queueManager.getJobs(data.queueName, data.status);
+    const jobs = await jobManager.getJobs(data.queueName, [data.status]);
 
     // Limit the results
     const limitedJobs = jobs.slice(0, data.limit);

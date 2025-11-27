@@ -29,11 +29,11 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,
 	loader: async ({ context }) => {
-
 		if (!context.session) {
 			throw redirect({
-				to: "/login",
-			});
+				to: "/auth/$authView",
+				params: { authView: "sign-in" }
+			})
 		}
 
 		//const listSubscriptions = await listPurchases();

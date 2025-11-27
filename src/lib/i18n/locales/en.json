@@ -1,0 +1,17 @@
+{
+    "setting": {
+        "code": "en",
+        "label": "English",
+        "flag": "🇬🇧",
+        "dir": "ltr"
+    },
+    "home": {
+        "apiStatus": "API Status",
+        "connected": "You are Connected to the System",
+        "disconnected": "Failed to connect to the System"
+    },
+    "seo": {
+        "title": "Digital Menu",
+        "description": "Digital Menu"
+    }
+}

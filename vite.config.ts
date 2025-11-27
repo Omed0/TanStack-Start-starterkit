@@ -16,8 +16,13 @@ export default defineConfig(({ mode }) => {
   }, {} as Record<string, string>);
 
   return {
+    server: {
+      port: 3000,
+    },
     plugins: [
-      tsconfigPaths(),
+      tsconfigPaths({
+        projects: ["./tsconfig.json"],
+      }),
       tanstackStart(),
       tailwindcss(),
       viteReact({
@@ -35,12 +40,26 @@ export default defineConfig(({ mode }) => {
       //cloudflare(), // this on development causes issues
     ],
     define,
-    ssr: {
-      noExternal: ['@prisma/client'],
-      external: ['@prisma/client', '.prisma/client'],
-    },
-    optimizeDeps: {
-      exclude: ['@prisma/client', '.prisma/client'],
-    },
+    //ssr: {
+    //  noExternal: ['@prisma/client'],
+    //  external: [
+    //    '@prisma/client',
+    //    '.prisma/client',
+    //    '@infra-kit/core',
+    //    'ioredis',
+    //    'bullmq',
+    //    'minio'
+    //  ],
+    //},
+    //optimizeDeps: {
+    //  exclude: [
+    //    '@prisma/client',
+    //    '.prisma/client',
+    //    '@infra-kit/core',
+    //    'ioredis',
+    //    'bullmq',
+    //    'minio'
+    //  ],
+    //},
   };
 });

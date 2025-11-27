@@ -1,9 +1,10 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { dbMiddleware } from "@/lib/tanstack-utils/middlewares";
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn, useServerFn } from "@tanstack/react-start";
+import { dbMiddleware } from "@/lib/tanstack-utils/middlewares";
+import { createFileRoute } from "@tanstack/react-router";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 import { Bug, Circle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const checkDB = createServerFn({ method: "GET" })
 	.middleware([dbMiddleware])
@@ -26,22 +27,31 @@ export const Route = createFileRoute("/")({
 
 
 const TITLE_TEXT = `
- ██████╗ ███████╗████████╗████████╗███████╗██████╗
- ██╔══██╗██╔════╝╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗
- ██████╔╝█████╗     ██║      ██║   █████╗  ██████╔╝
- ██╔══██╗██╔══╝     ██║      ██║   ██╔══╝  ██╔══██╗
- ██████╔╝███████╗   ██║      ██║   ███████╗██║  ██║
- ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝
-
- ████████╗    ███████╗████████╗ █████╗  ██████╗██╗  ██╗
- ╚══██╔══╝    ██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
-    ██║       ███████╗   ██║   ███████║██║     █████╔╝
-    ██║       ╚════██║   ██║   ██╔══██║██║     ██╔═██╗
-    ██║       ███████║   ██║   ██║  ██║╚██████╗██║  ██╗
-    ╚═╝       ╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+ ████████╗ █████╗ ███╗   ██╗███████╗████████╗ █████╗  ██████╗██╗  ██╗
+ ╚══██╔══╝██╔══██╗████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+    ██║   ███████║██╔██╗ ██║███████╗   ██║   ███████║██║     █████╔╝ 
+    ██║   ██╔══██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██╔═██╗ 
+    ██║   ██║  ██║██║ ╚████║███████║   ██║   ██║  ██║╚██████╗██║  ██╗
+    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+                                                                       
+ ███████╗████████╗ █████╗ ██████╗ ████████╗
+ ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝
+ ███████╗   ██║   ███████║██████╔╝   ██║   
+ ╚════██║   ██║   ██╔══██║██╔══██╗   ██║   
+ ███████║   ██║   ██║  ██║██║  ██║   ██║   
+ ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+                                            
+ ███████╗████████╗ █████╗ ██████╗ ████████╗███████╗██████╗ ██╗  ██╗██╗████████╗
+ ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██║ ██╔╝██║╚══██╔══╝
+ ███████╗   ██║   ███████║██████╔╝   ██║   █████╗  ██████╔╝█████╔╝ ██║   ██║   
+ ╚════██║   ██║   ██╔══██║██╔══██╗   ██║   ██╔══╝  ██╔══██╗██╔═██╗ ██║   ██║   
+ ███████║   ██║   ██║  ██║██║  ██║   ██║   ███████╗██║  ██║██║  ██╗██║   ██║   
+ ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝   ╚═╝   
  `;
 
+
 function HomeComponent() {
+	const { t } = useTranslation()
 	const $fn = useServerFn(checkDB)
 	const { data, isLoading, isError, error } = useQuery({
 		queryKey: ["checkDB"],
@@ -51,7 +61,7 @@ function HomeComponent() {
 	if (isError) {
 		return (
 			<div className="container mx-auto max-w-3xl px-4 py-2">
-				<h2 className="mb-2 font-medium">API Status</h2>
+				<h2 className="mb-2 font-medium">{t("home.apiStatus")}</h2>
 				<p className="text-red-500">{error.message}</p>
 			</div>
 		)
@@ -59,10 +69,10 @@ function HomeComponent() {
 
 	return (
 		<div className="container mx-auto max-w-3xl px-4 py-2">
-			<pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
+			<pre className="overflow-x-auto text-sm">{TITLE_TEXT}</pre>
 			<div className="grid gap-6">
 				<section className="rounded-lg border p-4">
-					<h2 className="mb-5 font-medium">API Status</h2>
+					<h2 className="mb-5 font-medium">{t("home.apiStatus")}</h2>
 					{isLoading ? (
 						<Skeleton className="h-6 w-24" />
 					) : (
@@ -73,8 +83,8 @@ function HomeComponent() {
 								<Bug className="fill-red-500 size-5" />
 							)}
 							<p>
-								{data?.success ? "You are Connected to the System" :
-									"Failed to connect to the System"}
+								{data?.success ? t("home.connected") :
+									t("home.disconnected")}
 							</p>
 						</div>
 					)}

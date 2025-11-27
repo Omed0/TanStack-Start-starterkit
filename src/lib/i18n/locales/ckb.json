@@ -1,0 +1,17 @@
+{
+    "setting": {
+        "code": "ckb",
+        "label": "کوردی",
+        "flag": "/flags/kurdistan.svg",
+        "dir": "rtl"
+    },
+    "home": {
+        "apiStatus": "دۆخی API",
+        "connected": "تۆ بەسترایتەوە بە سیستمەکە",
+        "disconnected": "شکستی هێنا لە پەیوەندیکردن بە سیستمەکە"
+    },
+    "seo": {
+        "title": "مینووی دیجیتاڵی",
+        "description": "مینووی دیجیتاڵی"
+    }
+}

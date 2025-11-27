@@ -1,3 +1,5 @@
+import "@/lib/infra-kit"
+
 import { auth } from "@/lib/auth";
 import { createFileRoute } from "@tanstack/react-router";
 

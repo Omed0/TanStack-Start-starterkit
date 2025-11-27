@@ -25,15 +25,13 @@ import {
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import UserMenu from "@/components/layout/user-menu";
-import LocaleSwitcher from "@/components/layout/locale-switcher";
-import { env } from "@/lib/env";
+import LocaleSwitcher from "@/components/layout/language-toggle";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
 export function AppSidebar() {
-    const pathname = usePathname();
-    const locale = useCurrentLocale()
+    const location = useLocation();
     // Menu items configuration with translation keys
     const menuItems = [
         {
@@ -74,9 +72,10 @@ export function AppSidebar() {
     ];
 
     return (
-        <Sidebar side={isRTLLocale(locale) ? "right" : "left"}>
+        <Sidebar side={true ? "right" : "left"}>
             <SidebarHeader className="p-4">
-                {env.APP_NAME}
+                Digital Menu
+                {/*{env.APP_NAME}*/}
             </SidebarHeader>
 
             <SidebarContent>
@@ -85,7 +84,7 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {menuItems.map((item) => {
-                                const isActive = pathname === item.url;
+                                const isActive = location.pathname === item.url;
                                 return (
                                     <SidebarMenuItem key={item.titleKey}>
                                         <SidebarMenuButton asChild isActive={isActive}>

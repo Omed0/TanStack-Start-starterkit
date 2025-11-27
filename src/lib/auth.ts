@@ -1,11 +1,11 @@
-import { reactStartCookies } from "better-auth/react-start";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 //import { polar, checkout } from "@polar-sh/better-auth";
 //import { polarClient } from "@/lib/polar-client";
 import { getEnv } from "@/lib/env";
 import prisma from "@/prisma";
-import { cache as secStorage } from "@/lib/redis";
+import { cache as secStorage } from "@/lib/cache";
 import {
   admin,
   //organization,
@@ -87,6 +87,6 @@ export const auth = betterAuth({
     //    //portal(),
     //  ],
     //}),
-    reactStartCookies(),
+    tanstackStartCookies(), // better-auth say this need to be last index of array plugin
   ],
 });
