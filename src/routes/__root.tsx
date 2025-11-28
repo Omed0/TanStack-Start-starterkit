@@ -3,6 +3,7 @@ import {
 	createRootRouteWithContext,
 	Scripts, useRouter
 } from "@tanstack/react-router";
+import { Providers } from "@/components/layout/clients-provider";
 import type { RqContext } from "@/lib/tanstack-utils/contexts";
 import { getUser, type AuthSession } from "@/fn/related-user";
 import { HeadContent } from "@tanstack/react-router";
@@ -43,8 +44,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: i18n.t("seo.title", { defaultValue: "Digital Menu" }),
-				description: i18n.t("seo.description", { defaultValue: "Digital Menu" }),
+				title: i18n.t("seo.title", { defaultValue: "Starter-kit" }),
+				description: i18n.t("seo.description", { defaultValue: "Starter-kit" }),
 			},
 		],
 		links: [
@@ -94,16 +95,18 @@ function RootDocument() {
 				<HeadContent />
 			</head>
 			<body className="grid h-svh grid-rows-[auto_1fr]">
-				<Header />
-				<Outlet />
-				<Toaster richColors />
-				<React.Suspense fallback={null}>
-					<ReactQueryDevtools
-						initialIsOpen={false}
-						buttonPosition="bottom-left"
-						client={queryClient}
-					/>
-				</React.Suspense>
+				<Providers>
+					<Header />
+					<Outlet />
+					<Toaster richColors />
+					<React.Suspense fallback={null}>
+						<ReactQueryDevtools
+							initialIsOpen={false}
+							buttonPosition="bottom-left"
+							client={queryClient}
+						/>
+					</React.Suspense>
+				</Providers>
 				<Scripts />
 			</body>
 		</html>

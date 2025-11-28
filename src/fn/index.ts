@@ -24,6 +24,7 @@ import * as analyticsFns from "@/fn/analytics";
 import * as fileFns from "@/fn/files";
 import { cache } from "react";
 
+//i like this style how u call this and work, look at queues and backup and what inside this api i use on ui
 export const api = cache(() =>
   createAPIUtils({
     todo: todoFns,

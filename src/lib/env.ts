@@ -7,8 +7,8 @@ import { cache } from "react";
  */
 const sharedEnvSchema = z.object({
   AUTH_BASE_URL: z.string().url().min(1),
-  APP_NAME: z.string().default("digital-menu"),
-  bucketName: z.string().min(1).default("digital-menu"),
+  APP_NAME: z.string().default("tanstack-start-starterkit"),
+  bucketName: z.string().min(1).default("tanstack-start-starterkit"),
   POSTHOG_PROJECT_ID: z.string().min(1),
   POSTHOG_API_HOST: z.string().url().default("https://eu.posthog.com"),
 });

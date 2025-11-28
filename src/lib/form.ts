@@ -17,3 +17,8 @@ export const { useAppForm, withForm } = createFormHook({
     fieldContext,
     formContext,
 })
+
+
+//example usage use this repo file
+//https://github.com/Balastrong/confhub/blob/main/src/routes/events/submit.tsx
+

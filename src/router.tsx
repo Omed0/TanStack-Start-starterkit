@@ -1,6 +1,6 @@
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import { Providers } from "./components/layout/clients-provider";
+
 import { getContext } from "@/lib/tanstack-utils/contexts";
 import Loader from "@/components/layout/loader";
 import { routeTree } from "@/routeTree.gen";
@@ -19,10 +19,11 @@ export function getRouter() {
 		defaultPendingComponent: () => <Loader />,
 		defaultNotFoundComponent: () => <div>Not Found</div>,
 		Wrap: ({ children }) => (
-			// u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here
-			<Providers>
-				{children}
-			</Providers>
+			// u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here, 
+
+
+			// do not wrap any provider here cause problem like something useRouter from tanstack router when initialize have issue
+			children
 		),
 	});
 

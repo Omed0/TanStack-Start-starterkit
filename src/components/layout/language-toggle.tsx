@@ -31,8 +31,8 @@ export function LanguageToggle() {
             <DropdownMenuTrigger asChild>
                 <Button
                     size="sm"
-                    variant="ghost"
-                    className="gap-2 px-2 w-15 items-center justify-between cursor-pointer"
+                    variant="outline"
+                    className="cursor-pointer"
                     aria-label={t("Change language", { defaultValue: "Change language" })}
                 >
                     <Languages className="size-4" />
