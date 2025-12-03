@@ -5,7 +5,7 @@
  * Initialize infra-kit configuration
  * This should be called once at application startup
  */
-import { initFromEnv } from '@infra-kit/core';
+import { initFromEnv } from '@omed0/infra-kit';
 import { initializeWorkers } from './jobs/init-workers';
 
 // Initialize Redis/infrastructure immediately (synchronous)

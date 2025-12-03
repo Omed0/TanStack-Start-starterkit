@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
     //  external: [
     //    '@prisma/client',
     //    '.prisma/client',
-    //    '@infra-kit/core',
+    //    '@omed0/infra-kit',
     //    'ioredis',
     //    'bullmq',
     //    'minio'
@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
     //  exclude: [
     //    '@prisma/client',
     //    '.prisma/client',
-    //    '@infra-kit/core',
+    //    '@omed0/infra-kit',
     //    'ioredis',
     //    'bullmq',
     //    'minio'

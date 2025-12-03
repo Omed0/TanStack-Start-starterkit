@@ -4,14 +4,14 @@
  * Abstraction layer for background job processing
  */
 
-import { getCacheClient } from '@infra-kit/core';
+import { getCacheClient } from '@omed0/infra-kit';
 import {
   Queue,
   Worker,
   type JobOptions as JobsOptions,
   type JobProcessor as Processor,
   type Job
-} from '@infra-kit/core/queue';
+} from '@omed0/infra-kit/queue';
 
 // Re-export from config (project-specific)
 export {

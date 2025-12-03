@@ -4,7 +4,7 @@
  * Abstraction layer for file storage operations
  */
 
-import { getStorageClient, ensureBucket as createBucketIfNotExists } from '@infra-kit/core/storage';
+import { getStorageClient, ensureBucket as createBucketIfNotExists } from '@omed0/infra-kit/storage';
 
 export async function createPresignedUrlToUpload({
     bucketName,

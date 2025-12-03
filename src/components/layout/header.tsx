@@ -13,7 +13,6 @@ export default function Header() {
 		{ to: "/analytics", label: "Analytics" },
 		{ to: "/files", label: "Files" },
 		{ to: "/ai", label: "AI Chat" },
-		{ to: "/$menu", label: "The Golden Spoon", param: "the-golden-spoon" as const },
 	];
 
 	return (
@@ -22,7 +21,7 @@ export default function Header() {
 				<nav className="flex gap-4 text-lg">
 					{links.map((route) => {
 						return (
-							<Link key={route.to} to={route.to} params={route.param ? { menu: route.param } : undefined}>
+							<Link key={route.to} to={route.to} >
 								{route.label}
 							</Link>
 						);

@@ -1,4 +1,8 @@
-import type { ConnectionOptions, QueueOptions, WorkerOptions } from "@infra-kit/core/queue";
+import type {
+  ConnectionOptions,
+  QueueOptions,
+  WorkerOptions,
+} from "@omed0/infra-kit/queue";
 import { getEnv } from "@/lib/env";
 import * as z from "zod/v3";
 
@@ -57,8 +61,6 @@ export const defaultWorkerOptions: Omit<WorkerOptions, "connection"> = {
   removeOnFail: { count: 5000 },
 };
 
-
-
 /**
  * Shared constants for BullMQ queues
  * Safe to import on both client and server
@@ -92,9 +94,15 @@ export enum JobPriority {
 export const JobPrioritySchema = z.nativeEnum(JobPriority);
 export type JobPriorityType = z.infer<typeof JobPrioritySchema>;
 
-
 /**
  * Job statuses for type safety and validation
  */
-export const JobStatusSchema = z.enum(["completed", "failed", "delayed", "active", "wait", "paused"]);
-export type JobStatus = z.infer<typeof JobStatusSchema>;  
+export const JobStatusSchema = z.enum([
+  "completed",
+  "failed",
+  "delayed",
+  "active",
+  "wait",
+  "paused",
+]);
+export type JobStatus = z.infer<typeof JobStatusSchema>;

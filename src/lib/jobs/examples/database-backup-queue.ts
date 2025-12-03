@@ -21,7 +21,7 @@ import {
   jobManager,
   jobProcessor,
   createProcessor,
-  JobQueueSchema
+  JobQueueSchema,
 } from "@/lib/jobs";
 import { exec } from "child_process";
 import { promisify } from "util";
@@ -30,7 +30,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as crypto from "crypto";
 import { bucketName } from "@/lib/storage/constant";
-import type { Job } from "infra-kit/dist/queue";
+import type { Job } from "@omed0/infra-kit/queue";
 
 const execAsync = promisify(exec);
 
@@ -240,14 +240,16 @@ async function createDatabaseDump(
   try {
     await execAsync(command);
     console.log(
-      `Database backup created: ${filepath} ${parallelJobs ? `(${parallelJobs} parallel jobs)` : ""
+      `Database backup created: ${filepath} ${
+        parallelJobs ? `(${parallelJobs} parallel jobs)` : ""
       }`
     );
     return filepath;
   } catch (error) {
     console.error("Failed to create database backup:", error);
     throw new Error(
-      `Database backup failed: ${error instanceof Error ? error.message : String(error)
+      `Database backup failed: ${
+        error instanceof Error ? error.message : String(error)
       }`
     );
   }
@@ -276,7 +278,8 @@ async function compressFile(filepath: string): Promise<string> {
   } catch (error) {
     console.error("Failed to compress file:", error);
     throw new Error(
-      `Compression failed: ${error instanceof Error ? error.message : String(error)
+      `Compression failed: ${
+        error instanceof Error ? error.message : String(error)
       }`
     );
   }
@@ -307,9 +310,7 @@ async function uploadToStorage(
   const objectName = `backups/database/${filename}`;
 
   // Use the uploadFileToBucket utility from storage
-  const { uploadFileToBucket } = await import(
-    "@/lib/storage"
-  );
+  const { uploadFileToBucket } = await import("@/lib/storage");
 
   await uploadFileToBucket({
     bucketName,
@@ -336,10 +337,13 @@ async function cleanupOldBackups(
 ): Promise<void> {
   const prefix = "backups/database/";
 
-  const { ensureBucket: createBucketIfNotExists } = await import("@infra-kit/core/storage");
+  const { ensureBucket: createBucketIfNotExists } = await import(
+    "@omed0/infra-kit/storage"
+  );
   // Import utilities from storage
-  const { deleteFileFromBucket, keepLatestBackups } =
-    await import("@/lib/storage");
+  const { deleteFileFromBucket, keepLatestBackups } = await import(
+    "@/lib/storage"
+  );
 
   // Ensure bucket exists before listing
   await createBucketIfNotExists(bucketName);

@@ -17,14 +17,9 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BackupRouteImport } from './routes/backup'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AiRouteImport } from './routes/ai'
-import { Route as MenuRouteRouteImport } from './routes/$menu/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as MenuIndexRouteImport } from './routes/$menu/index'
 import { Route as AuthAuthViewRouteImport } from './routes/auth/$authView'
 import { Route as AccountAccountViewRouteImport } from './routes/account/$accountView'
-import { Route as MenuMenuRouteImport } from './routes/$menu/menu'
-import { Route as MenuFeedbackRouteImport } from './routes/$menu/feedback'
-import { Route as MenuItemRouteImport } from './routes/$menu/$item'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiAiSplatRouteImport } from './routes/api/ai/$'
 
@@ -68,20 +63,10 @@ const AiRoute = AiRouteImport.update({
   path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MenuRouteRoute = MenuRouteRouteImport.update({
-  id: '/$menu',
-  path: '/$menu',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const MenuIndexRoute = MenuIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MenuRouteRoute,
 } as any)
 const AuthAuthViewRoute = AuthAuthViewRouteImport.update({
   id: '/auth/$authView',
@@ -92,21 +77,6 @@ const AccountAccountViewRoute = AccountAccountViewRouteImport.update({
   id: '/account/$accountView',
   path: '/account/$accountView',
   getParentRoute: () => rootRouteImport,
-} as any)
-const MenuMenuRoute = MenuMenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
-  getParentRoute: () => MenuRouteRoute,
-} as any)
-const MenuFeedbackRoute = MenuFeedbackRouteImport.update({
-  id: '/feedback',
-  path: '/feedback',
-  getParentRoute: () => MenuRouteRoute,
-} as any)
-const MenuItemRoute = MenuItemRouteImport.update({
-  id: '/$item',
-  path: '/$item',
-  getParentRoute: () => MenuRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -121,7 +91,6 @@ const ApiAiSplatRoute = ApiAiSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$menu': typeof MenuRouteRouteWithChildren
   '/ai': typeof AiRoute
   '/analytics': typeof AnalyticsRoute
   '/backup': typeof BackupRoute
@@ -130,12 +99,8 @@ export interface FileRoutesByFullPath {
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/$menu/$item': typeof MenuItemRoute
-  '/$menu/feedback': typeof MenuFeedbackRoute
-  '/$menu/menu': typeof MenuMenuRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
-  '/$menu/': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -149,19 +114,14 @@ export interface FileRoutesByTo {
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/$menu/$item': typeof MenuItemRoute
-  '/$menu/feedback': typeof MenuFeedbackRoute
-  '/$menu/menu': typeof MenuMenuRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
-  '/$menu': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$menu': typeof MenuRouteRouteWithChildren
   '/ai': typeof AiRoute
   '/analytics': typeof AnalyticsRoute
   '/backup': typeof BackupRoute
@@ -170,12 +130,8 @@ export interface FileRoutesById {
   '/queues': typeof QueuesRoute
   '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/$menu/$item': typeof MenuItemRoute
-  '/$menu/feedback': typeof MenuFeedbackRoute
-  '/$menu/menu': typeof MenuMenuRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
-  '/$menu/': typeof MenuIndexRoute
   '/api/ai/$': typeof ApiAiSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -183,7 +139,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/$menu'
     | '/ai'
     | '/analytics'
     | '/backup'
@@ -192,12 +147,8 @@ export interface FileRouteTypes {
     | '/queues'
     | '/success'
     | '/todos'
-    | '/$menu/$item'
-    | '/$menu/feedback'
-    | '/$menu/menu'
     | '/account/$accountView'
     | '/auth/$authView'
-    | '/$menu/'
     | '/api/ai/$'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
@@ -211,18 +162,13 @@ export interface FileRouteTypes {
     | '/queues'
     | '/success'
     | '/todos'
-    | '/$menu/$item'
-    | '/$menu/feedback'
-    | '/$menu/menu'
     | '/account/$accountView'
     | '/auth/$authView'
-    | '/$menu'
     | '/api/ai/$'
     | '/api/auth/$'
   id:
     | '__root__'
     | '/'
-    | '/$menu'
     | '/ai'
     | '/analytics'
     | '/backup'
@@ -231,19 +177,14 @@ export interface FileRouteTypes {
     | '/queues'
     | '/success'
     | '/todos'
-    | '/$menu/$item'
-    | '/$menu/feedback'
-    | '/$menu/menu'
     | '/account/$accountView'
     | '/auth/$authView'
-    | '/$menu/'
     | '/api/ai/$'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MenuRouteRoute: typeof MenuRouteRouteWithChildren
   AiRoute: typeof AiRoute
   AnalyticsRoute: typeof AnalyticsRoute
   BackupRoute: typeof BackupRoute
@@ -316,26 +257,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$menu': {
-      id: '/$menu'
-      path: '/$menu'
-      fullPath: '/$menu'
-      preLoaderRoute: typeof MenuRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/$menu/': {
-      id: '/$menu/'
-      path: '/'
-      fullPath: '/$menu/'
-      preLoaderRoute: typeof MenuIndexRouteImport
-      parentRoute: typeof MenuRouteRoute
     }
     '/auth/$authView': {
       id: '/auth/$authView'
@@ -350,27 +277,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/$accountView'
       preLoaderRoute: typeof AccountAccountViewRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/$menu/menu': {
-      id: '/$menu/menu'
-      path: '/menu'
-      fullPath: '/$menu/menu'
-      preLoaderRoute: typeof MenuMenuRouteImport
-      parentRoute: typeof MenuRouteRoute
-    }
-    '/$menu/feedback': {
-      id: '/$menu/feedback'
-      path: '/feedback'
-      fullPath: '/$menu/feedback'
-      preLoaderRoute: typeof MenuFeedbackRouteImport
-      parentRoute: typeof MenuRouteRoute
-    }
-    '/$menu/$item': {
-      id: '/$menu/$item'
-      path: '/$item'
-      fullPath: '/$menu/$item'
-      preLoaderRoute: typeof MenuItemRouteImport
-      parentRoute: typeof MenuRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -389,27 +295,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface MenuRouteRouteChildren {
-  MenuItemRoute: typeof MenuItemRoute
-  MenuFeedbackRoute: typeof MenuFeedbackRoute
-  MenuMenuRoute: typeof MenuMenuRoute
-  MenuIndexRoute: typeof MenuIndexRoute
-}
-
-const MenuRouteRouteChildren: MenuRouteRouteChildren = {
-  MenuItemRoute: MenuItemRoute,
-  MenuFeedbackRoute: MenuFeedbackRoute,
-  MenuMenuRoute: MenuMenuRoute,
-  MenuIndexRoute: MenuIndexRoute,
-}
-
-const MenuRouteRouteWithChildren = MenuRouteRoute._addFileChildren(
-  MenuRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MenuRouteRoute: MenuRouteRouteWithChildren,
   AiRoute: AiRoute,
   AnalyticsRoute: AnalyticsRoute,
   BackupRoute: BackupRoute,

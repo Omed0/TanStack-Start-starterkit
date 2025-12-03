@@ -1,23 +1,22 @@
 /**
  * Cache utilities using infra-kit
- * 
+ *
  * Abstraction layer for caching operations
  */
 
-import { getCacheClient } from '@infra-kit/core';
-import type { CacheOptions } from '@infra-kit/core/cache';
-import * as infraCache from '@infra-kit/core/cache';
-
+import { getCacheClient } from "@omed0/infra-kit";
+import type { CacheOptions } from "@omed0/infra-kit/cache";
+import * as infraCache from "@omed0/infra-kit/cache";
 
 export async function disconnectCache() {
-  const { disconnect } = await import('@infra-kit/core');
+  const { disconnect } = await import("@omed0/infra-kit");
   return disconnect();
 }
 
 export function isCacheReady() {
   try {
     const client = getCacheClient();
-    return client.status === 'ready' || client.status === 'connect';
+    return client.status === "ready" || client.status === "connect";
   } catch {
     return false;
   }
@@ -32,7 +31,7 @@ export class CacheService {
   private namespace: string;
 
   constructor(options?: { namespace?: string }) {
-    this.namespace = options?.namespace || '';
+    this.namespace = options?.namespace || "";
   }
 
   private getKey(key: string): string {
@@ -84,7 +83,7 @@ export async function healthCheck(): Promise<HealthCheckResult> {
   } catch (error) {
     return {
       healthy: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
