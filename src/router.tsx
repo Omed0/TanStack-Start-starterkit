@@ -21,7 +21,6 @@ export function getRouter() {
 		Wrap: ({ children }) => (
 			// u dont need add ProviderQueryClient here anymore because of setupRouterSsrQueryIntegration with wrapQueryClient: true do it for us, but if u have more providers u can add them here, 
 
-
 			// do not wrap any provider here cause problem like something useRouter from tanstack router when initialize have issue
 			children
 		),

@@ -83,6 +83,7 @@ function RootDocument() {
 	React.useEffect(() => {
 		const handler = () => {
 			router.invalidate()
+			document.dir = i18n.dir()
 		}
 		i18n.on("languageChanged", handler)
 		return () => {
