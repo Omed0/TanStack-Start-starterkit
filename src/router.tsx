@@ -6,7 +6,7 @@ import Loader from "@/components/layout/loader";
 import { routeTree } from "@/routeTree.gen";
 import "@/lib/i18n/index"
 import "@/index.css";
-
+ 
 
 export function getRouter() {
 	const rqContexts = getContext();
